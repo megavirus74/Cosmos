@@ -1,0 +1,2 @@
+# Cosmos
+Project for studying
