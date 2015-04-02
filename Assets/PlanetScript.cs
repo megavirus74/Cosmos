@@ -3,6 +3,9 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class PlanetScript : MonoBehaviour {
+    private const float CONST_TIMER_POPULATION= 0.2f; 
+
+
     private readonly String[] NamesOfPlanets = {
         "Izida", "Maverick", "Mars", "Saturn", "Andromeda", "Kodeus"
     };
@@ -56,7 +59,7 @@ public class PlanetScript : MonoBehaviour {
                        namesOfPlanetsNum[Random.Range(0, namesOfPlanetsNum.Length)];
 
         //настройка таймеров 
-        timerPopulation = 0.1f;
+        timerPopulation = CONST_TIMER_POPULATION;
         timerColonization = Random.Range(5f, 10f);
 
         //настройка размещения
@@ -78,8 +81,9 @@ public class PlanetScript : MonoBehaviour {
         if (Population > 0 && Population < Capacity) {
             isEmpty = false;
             if (timerPopulation < 0f) {
-                timerPopulation = 0.1f;
-                Population = Population + Random.Range(1, 100)*Convert.ToInt32(Math.Log(Population));
+                timerPopulation = CONST_TIMER_POPULATION;
+                Population -= Random.Range(10, 500) * Convert.ToInt32(Math.Log10(Population));
+                Population += Random.Range(100, 1000)*Convert.ToInt32(Math.Log(Population));
             }
         }
 

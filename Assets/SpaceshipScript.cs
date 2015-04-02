@@ -3,11 +3,14 @@
 public class SpaceshipScript : MonoBehaviour {
     public Sprite AsariShipSprite;
     public Sprite CroganShipSprite;
-    private bool FoundNeutral;
+    private bool FoundNeutral = false;
     public int Fraction;
     public GameObject ParentPlanet;
     public int Population;
     public GameObject TargetPlanet;
+    public GameObject Text;
+    public GameObject textClone;
+    
 
     // Use this for initialization
     private void Start() {
@@ -36,6 +39,10 @@ public class SpaceshipScript : MonoBehaviour {
         Vector3 targetDir = TargetPlanet.transform.position - transform.position;
         gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, targetDir);
         gameObject.rigidbody2D.AddRelativeForce(new Vector2(0f, 50f));
+
+        //Создание текстового описания
+        textClone = (GameObject)Instantiate(Text);
+        textClone.GetComponent<PlanetTextScript>().Target = gameObject;
     }
 
     // Update is called once per frame
@@ -60,7 +67,9 @@ public class SpaceshipScript : MonoBehaviour {
                         if (Population < clonePlanetScript.Population)
                             clonePlanetScript.Population = clonePlanetScript.Population-Population;
                     }
-                    if (clonePlanetScript.Fraction == 1) clonePlanetScript.Population += Population;
+                    if (clonePlanetScript.Fraction == 2) {
+                        clonePlanetScript.Population -= Population;
+                    }
 
                     break;
                 case 2:
@@ -75,13 +84,14 @@ public class SpaceshipScript : MonoBehaviour {
                         }
                         //иначе на планете умирает столько человек сколько было на корабле
                         if (Population < clonePlanetScript.Population)
-                            clonePlanetScript.Population =clonePlanetScript.Population- Population;
+                            clonePlanetScript.Population -= Population;
                     }
-                    if (clonePlanetScript.Fraction == 2) clonePlanetScript.Population += Population;
+                    if (clonePlanetScript.Fraction == 1) clonePlanetScript.Population -= Population;
                     break;
             }
             coll.gameObject.GetComponent<PlanetScript>().Population += Population;
             Destroy(gameObject);
+            Destroy(textClone);
         }
     }
 }
